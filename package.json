@@ -1,0 +1,30 @@
+{
+  "name": "tomascli",
+  "version": "1.0.0",
+  "description": "The official CLI for TomasJS",
+  "exports": "./src/main.js",
+  "type": "module",
+  "engines": {
+    "node": ">=14.16"
+  },
+  "scripts": {
+    "compile-clean": "del dist /s /q",
+    "compile-build": "tsc -b && tsc-alias",
+    "tomas": "npm run compile-clean && npm run compile-build && node ./dist/main.js",
+    "tomas2": "ts-node -r tsconfig-paths/register ./src/main.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.2",
+    "tsconfig-paths": "^4.1.2",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "commander": "^10.0.0",
+    "inquirer": "^9.1.4"
+  }
+}
