@@ -106,4 +106,5 @@ dist
 # Config files
 config.json
 
+bin
 temp

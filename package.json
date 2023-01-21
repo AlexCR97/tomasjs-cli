@@ -8,10 +8,10 @@
     "node": ">=14.16"
   },
   "scripts": {
-    "compile-clean": "del dist /s /q",
+    "compile-clean": "del bin /s /q",
     "compile-build": "tsc -b && tsc-alias",
-    "tomas": "npm run compile-clean && npm run compile-build && node ./dist/main.js",
-    "tomas2": "ts-node -r tsconfig-paths/register ./src/main.ts"
+    "compile": "npm run compile-clean && npm run compile-build",
+    "tomas": "npm run compile && node ./bin/main.js"
   },
   "author": "",
   "license": "ISC",
@@ -26,5 +26,8 @@
   "dependencies": {
     "commander": "^10.0.0",
     "inquirer": "^9.1.4"
+  },
+  "bin": {
+    "tomas": "./bin/main.js"
   }
 }

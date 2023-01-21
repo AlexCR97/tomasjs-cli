@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "rootDir": "./src",
-    "outDir": "./dist",
+    "outDir": "./bin",
     "baseUrl": "./",
     "declaration": true,
     "esModuleInterop": true,
