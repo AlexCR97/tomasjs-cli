@@ -1,5 +1,5 @@
-import { environment } from "@/environment.js";
-import { Files } from "@/services/Files.js";
+import { files } from "@/services/index.js";
+import endpointTemplate from "@/template/src/endpoints/EndpointTemplate.js";
 import { Command } from "commander";
 import path from "path";
 
@@ -8,26 +8,42 @@ export const GenerateEndpointCommand = new Command()
   .argument("<path>")
   .description("Generates an endpoint")
   .action((pathArg: string) => {
-    const files = new Files();
-    const pathPartsWithFileName = pathArg.split("/");
-    const pathPartsWithoutFileName = pathPartsWithFileName.slice(0, -1);
-    const endpointName = pathPartsWithFileName[pathPartsWithFileName.length - 1];
-    const finalFileName = `${endpointName}Endpoint.ts`;
-    const pathWithoutFile = path.join("temp", "endpoints", ...pathPartsWithoutFileName);
-    const pathWithFile = path.join("temp", "endpoints", ...pathPartsWithoutFileName, finalFileName);
+    // console.log("pathArg", pathArg);
 
-    const endpointTemplatePath = path.join(
-      environment.srcPath,
-      "template",
-      "src",
-      "endpoints",
-      "EndpointTemplate.txt"
-    );
-    const fileContent = files.read(endpointTemplatePath).replace("{{Name}}", endpointName);
+    const { endpointDirectory, endpointName, endpointPath } = getEndpointFileMetadata(pathArg);
+    // console.log("endpointDirectory", endpointDirectory);
+    // console.log("endpointName", endpointName);
+    // console.log("endpointPath", endpointPath);
 
-    console.log("pathWithoutFile", pathWithoutFile);
-    console.log("pathWithFile", pathWithFile);
-    console.log("fileContent", fileContent);
-    // files.ensureDirectory(pathWithoutFile);
-    // files.create(pathWithFile, fileContent);
+    if (files.exists(endpointPath)) {
+      throw new Error(
+        `There is already an endpoint named "${endpointName}" in the path "${endpointDirectory}" ("${endpointPath}")`
+      );
+    }
+
+    const endpointContent = endpointTemplate.replace("{{name}}", endpointName);
+    // console.log("endpointContent", endpointContent);
+
+    files.ensureDirectory(endpointDirectory);
+    files.create(endpointPath, endpointContent);
   });
+
+function getEndpointFileMetadata($path: string) {
+  const pathParts = $path.split("/");
+  const pathPartsWithoutFileName = pathParts.slice(0, -1);
+  const endpointName = pathParts[pathParts.length - 1];
+  const endpointFileName = `${endpointName}Endpoint.ts`;
+  const currentDirectory = process.cwd();
+  const endpointDirectory = path.join(currentDirectory, "src", ...pathPartsWithoutFileName);
+  const endpointPath = path.join(
+    currentDirectory,
+    "src",
+    ...pathPartsWithoutFileName,
+    endpointFileName
+  );
+  return {
+    endpointDirectory,
+    endpointName,
+    endpointPath,
+  };
+}

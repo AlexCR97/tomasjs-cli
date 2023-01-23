@@ -10,11 +10,15 @@ export class Files {
   }
 
   ensureDirectory(path: string): void {
-    if (existsSync(path)) {
+    if (this.exists(path)) {
       return;
     }
 
     mkdirSync(path, { recursive: true });
+  }
+
+  exists(path: string): boolean {
+    return existsSync(path);
   }
 
   read(path: string): string {

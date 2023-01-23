@@ -11,6 +11,7 @@
     "compile-clean": "del bin /s /q",
     "compile-build": "tsc -b && tsc-alias",
     "compile": "npm run compile-clean && npm run compile-build",
+    "compile-install": "npm run compile && npm install -g .",
     "tomas": "npm run compile && node ./bin/main.js"
   },
   "author": "",
